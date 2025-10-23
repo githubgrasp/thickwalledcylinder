@@ -82,12 +82,12 @@ t = linspace(t1+delta_t/mt,t2,mt);
 
 %%% Age-Adjusted Effective Modulus according to AAEM method
 Eeff1(mt)= 0.;
-for i=1:mt
+for i=1:mt %time loop
 Eeff1(i) = Eeff_AAEM(t(i),t1, q1,q2,q3,q4); %age-adjusted effective modulus for each t between t(1) and t(mt)
 end
 
 ft(mt) = 0.; 
-for i=1:mt
+for i=1:mt %time loop
 ft(i) = fct_MC(t(i),ft28,fc28,fib_s);
 end
 
@@ -122,7 +122,11 @@ flag(mt,mr)=0.; %flag contains an interger that represents the state of the cyli
 %2 : cracked
 
 for i=1:mt %time loop
-    
+
+	%Switch off effect of aging and creep
+	%Eeff1(i) = E28;
+    %ft(i) = ft28;
+	
 	u_i(i) = 0.0315e-3*(alpha-1.)*icor*(t(i)-t1);% Boundary condition imposed at the inner border of the cylinder by the steel expansion
     %steel expansion simplified with q=0 (no transport of the rust into the
     %concrete)
@@ -163,7 +167,6 @@ sigR_ri_Norm = sigR_ri*(ri/(ft28*(ro-ri)));
 
 data(:,1) = u_i(:);
 data(:,2) = sigR_ri_Norm(:);
-
 
 save('pressure.dat','data','-ascii')
 
